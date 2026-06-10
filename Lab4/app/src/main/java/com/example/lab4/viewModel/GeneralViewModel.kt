@@ -1,27 +1,36 @@
 package com.example.lab4.viewModel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.lab4.InitDatabase
 import com.example.lab4.data.model.Task
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class GeneralViewModel : ViewModel() {
-    private val _tasks = MutableStateFlow<MutableList<Task>>(mutableListOf())
-    val tasks = _tasks.asStateFlow()
+    private val taskDao = InitDatabase.database.taskDao()
 
-    fun addTask(task: Task) {
-        _tasks.value = _tasks.value.toMutableList().apply { add(task) }
-    }
-    fun toggleTask(taskId: Int) {
-        _tasks.value = _tasks.value.map {
-            if (it.id == taskId) it.copy(isCompleted = !it.isCompleted) else it
-        }.toMutableList()
-    }
+    val tasks = taskDao.getAllTasks()
 
-    fun deleteTask(taskId: Int) {
-        _tasks.value = _tasks.value.toMutableList().apply {
-            removeIf { it.id == taskId }
+    fun addTask(title: String, description: String) {
+        viewModelScope.launch {
+            taskDao.insertTask(
+                Task(
+                title = title,
+                description = description)
+            )
         }
     }
 
+    fun toggleTask(task: Task) {
+        viewModelScope.launch {
+            taskDao.updateTask(
+                task.copy(isCompleted = !task.isCompleted))
+        }
+    }
+
+    fun deleteTask(task: Task) {
+        viewModelScope.launch {
+            taskDao.deleteTask(task)
+        }
+    }
 }

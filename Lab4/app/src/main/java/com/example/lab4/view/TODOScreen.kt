@@ -10,13 +10,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.lab4.data.model.Task
 import com.example.lab4.viewModel.GeneralViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TODOScreen(viewModel: GeneralViewModel) {
-    val tasks by viewModel.tasks.collectAsState()
+    val tasks by viewModel.tasks.collectAsState(initial = emptyList())
     var showDialog by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -46,8 +45,8 @@ fun TODOScreen(viewModel: GeneralViewModel) {
             items(tasks) { task ->
                 TaskCard(
                     task = task,
-                    onCheckedChange = { viewModel.toggleTask(task.id) },
-                    onDelete = { viewModel.deleteTask(task.id) }
+                    onCheckedChange = { viewModel.toggleTask(task) },
+                    onDelete = { viewModel.deleteTask(task) }
                 )
             }
         }
@@ -56,7 +55,7 @@ fun TODOScreen(viewModel: GeneralViewModel) {
             CreateTaskDialog(
                 onDismiss = { showDialog = false },
                 onTaskCreated = { title, desc ->
-                    viewModel.addTask(Task(id = tasks.size + 1, title = title, description = desc))
+                    viewModel.addTask(title, desc)
                     showDialog = false
                 }
             )

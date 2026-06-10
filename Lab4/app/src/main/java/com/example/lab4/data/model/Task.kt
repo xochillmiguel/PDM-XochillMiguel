@@ -1,11 +1,15 @@
 package com.example.lab4.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.Date
 
+@Entity(tableName = "tasks")
 data class Task (
-    val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val title: String,
     val description: String,
-    val endDate: Date  = Date(),
+    val endDate: Long = Date().time,
     val isCompleted: Boolean = false
 )

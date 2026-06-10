@@ -55,7 +55,7 @@ fun TaskCard(
 
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "fecha: " + task.endDate.toString(),
+                    text = "fecha: " + java.util.Date(task.endDate).toString(),
                     style = MaterialTheme.typography.labelSmall,
                     color = Color.DarkGray
                 )
