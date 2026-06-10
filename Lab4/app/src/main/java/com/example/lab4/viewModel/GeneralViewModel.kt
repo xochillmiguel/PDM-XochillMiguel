@@ -17,4 +17,11 @@ class GeneralViewModel : ViewModel() {
             if (it.id == taskId) it.copy(isCompleted = !it.isCompleted) else it
         }.toMutableList()
     }
+
+    fun deleteTask(taskId: Int) {
+        _tasks.value = _tasks.value.toMutableList().apply {
+            removeIf { it.id == taskId }
+        }
+    }
+
 }

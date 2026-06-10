@@ -46,7 +46,8 @@ fun TODOScreen(viewModel: GeneralViewModel) {
             items(tasks) { task ->
                 TaskCard(
                     task = task,
-                    onCheckedChange = { viewModel.toggleTask(task.id) }
+                    onCheckedChange = { viewModel.toggleTask(task.id) },
+                    onDelete = { viewModel.deleteTask(task.id) }
                 )
             }
         }

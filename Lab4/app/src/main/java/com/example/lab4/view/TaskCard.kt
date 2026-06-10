@@ -10,11 +10,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.lab4.data.model.Task
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.ui.text.style.TextDecoration
 
 @Composable
 fun TaskCard(
     task: Task,
     onCheckedChange: (Boolean) -> Unit,
+    onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -27,11 +31,16 @@ fun TaskCard(
         ) {
             Checkbox(checked = task.isCompleted, onCheckedChange = onCheckedChange)
 
-            Column(modifier = Modifier.padding(start = 8.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp)
+                    .weight(1f)
+            ){
                 Text(
                     text = "# ${task.id} : " + task.title,
                     style = MaterialTheme.typography.titleMedium,
-                    color = Color.Black
+                    color = Color.Black,
+                    textDecoration = if (task.isCompleted) TextDecoration.LineThrough else TextDecoration.None
                 )
 
                 if (task.description.isNotBlank()) {
@@ -39,7 +48,8 @@ fun TaskCard(
                     Text(
                         text = "mini descripción: " + task.description,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Black
+                        color = Color.DarkGray,
+                        textDecoration = if (task.isCompleted) TextDecoration.LineThrough else TextDecoration.None
                     )
                 }
 
@@ -48,6 +58,13 @@ fun TaskCard(
                     text = "fecha: " + task.endDate.toString(),
                     style = MaterialTheme.typography.labelSmall,
                     color = Color.DarkGray
+                )
+            }
+            IconButton(onClick = onDelete) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "eliminar",
+                    tint = Color(0xFF96C0FF)
                 )
             }
         }
